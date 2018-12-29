@@ -25,7 +25,7 @@ class Dataset():
             train_set = tf.data.Dataset.from_tensor_slices(self.train_files)
             train_set = train_set.map(self._parse_fn)
             train_set = train_set.shuffle(1000)
-            train_set = train_set.batch(self.batch_size, drop_remainder=True)
+            train_set = train_set.batch(self.batch_size)
             self.train_set = train_set.repeat()
             self.train_steps_per_epoch = ceil(len(self.train_files) / self.batch_size)
 
@@ -61,6 +61,7 @@ class Dataset():
             hr_image = tf.random_crop(hr_image, size=(self.img_size, self.img_size, 3))
             hr_image = tf.image.random_flip_up_down(hr_image)
             hr_image = tf.image.random_flip_left_right(hr_image)
+            hr_image = tf.image.rot90(hr_image, k=tf.random_uniform((), minval=0, maxval=4, dtype=tf.int32))
         else:
             hr_image = self._chop(hr_image)
 

@@ -1,11 +1,19 @@
 import tensorflow as tf
 from tensorflow import keras
-from tensorflow.keras.callbacks import TensorBoard
 
 import os
 from pathlib import Path
 
 import datetime
+
+def step_decay(epoch, init_value=1e-4):
+    x = init_value
+    if x / 2e+5 < 1.:
+        return x
+    else:
+        for _ in range(x // 2e+5):
+            x /= 2
+        return x
 
 def build_save_path(flags):
     if not os.path.exists(flags.save_dir):
