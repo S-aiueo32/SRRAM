@@ -3,7 +3,7 @@ from tensorflow.keras import Model
 from tensorflow.keras.layers import Input, Conv2D
 from tensorflow.keras.layers import add
 
-from ops import RAM, SubpixelConv2D
+from ops import RAM, SubpixelConv2D, Normalization, Denormalization
 
 class SRRAM():
     def __init__(self, scale_factor=2, channels=64, kernel_size=3, blocks=16):
@@ -16,10 +16,11 @@ class SRRAM():
 
     def _build_model(self):
         input_image = Input(shape=(None, None, 3))
+        x = Normalization()(input_image)
 
         # feature extraction part
         with tf.variable_scope('initial'):
-            x = f0 = Conv2D(64, kernel_size=self.k_size, strides=1, padding='same')(input_image)
+            x = f0 = Conv2D(64, kernel_size=self.k_size, strides=1, padding='same')(x)
         # stacking RAM blocks
         for i in range(self.blocks):
             with tf.variable_scope('RAM_{}'.format(i)):
@@ -47,7 +48,7 @@ class SRRAM():
         with tf.variable_scope('output'):
             x = Conv2D(3, kernel_size=self.k_size, strides=1, padding='same')(x)
 
-        output_image = x
+        output_image = Denormalization()(x)
 
         #tf.summary.image('input_image', input_image)
         #tf.summary.image('output_image', output_image)

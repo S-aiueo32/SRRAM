@@ -67,7 +67,7 @@ class Dataset():
 
         down_size = tf.cast(tf.shape(hr_image)[:-1]/2, tf.int32)
         lr_image = tf.image.resize_images(hr_image, size=down_size, method=ResizeMethod.BICUBIC)
-        return lr_image / 255, hr_image / 255
+        return lr_image, hr_image
 
     def _chop(self, image):
         size = tf.unstack(tf.shape(image)[:-1])

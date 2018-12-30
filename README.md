@@ -1,4 +1,4 @@
-# SRRAM
+# SRRAM with tf.keras
 ## Inttoduction
 This is an unofficial implementation of RAM: Residual Attention Module for Single Image Super-Resolution [[arXiv]](https://arxiv.org/abs/1811.12043). 
 

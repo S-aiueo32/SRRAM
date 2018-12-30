@@ -6,13 +6,13 @@ from pathlib import Path
 
 import datetime
 
-def step_decay(epoch, init_value=1e-4):
+def lr_decay(epoch, init_value=1e-4, decay_step=2e+5, decay_rate=2):
     x = init_value
-    if x / 2e+5 < 1.:
+    if x / decay_step < 1.:
         return x
     else:
-        for _ in range(x // 2e+5):
-            x /= 2
+        for _ in range(x // decay_step):
+            x /= decay_rate
         return x
 
 def build_save_path(flags):

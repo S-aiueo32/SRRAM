@@ -3,6 +3,9 @@ from tensorflow.keras.layers import Conv2D, DepthwiseConv2D, Dense, ReLU
 from tensorflow.keras.layers import Lambda, Activation
 from tensorflow.keras.layers import add, multiply
 
+import numpy as np
+General100_RGB_MEAN = np.array([140.9, 127.1, 103.2])
+
 def RAM(input, channels, kernel_size=3):
     # pre-attention feature extraction
     x = Conv2D(channels, kernel_size, strides=1, padding='same')(input)
@@ -43,3 +46,10 @@ def SubpixelConv2D(input_shape, scale=4):
         return tf.depth_to_space(x, scale)
 
     return Lambda(subpixel, output_shape=subpixel_shape)
+
+def Normalization(rgb_mean=General100_RGB_MEAN, **kwargs):
+    return Lambda(lambda x: (x - rgb_mean) / 127.5, **kwargs)
+
+
+def Denormalization(rgb_mean=General100_RGB_MEAN, **kwargs):
+    return Lambda(lambda x: x * 127.5 + rgb_mean, **kwargs)
