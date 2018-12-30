@@ -27,7 +27,7 @@ parser.add_argument('--extension', type=str, default='bmp')
 flags = parser.parse_args()
 
 dataset = Dataset(flags)
-srram = SRRAM(scale_factor=2)
+srram = SRRAM(scale_factor=flags.scale_factor)
 
 save_path = utils.build_save_path(flags)
 cbs = [TensorBoard(log_dir=save_path, histogram_freq=1, write_graph=True),

@@ -33,6 +33,11 @@ def SA(input, kernel_size=3):
     x = DepthwiseConv2D(kernel_size, padding='same')(input)
     return x
 
+def upsampler(input, scale, channels=64, kernel_size=3):
+    x = Conv2D(channels * (scale ** 2), kernel_size, strides=1, padding='same')(input)
+    x = SubpixelConv2D(x.shape, scale=scale)(x)
+    return x
+
 def SubpixelConv2D(input_shape, scale=4):
     def subpixel_shape(input_shape):
         dims = [input_shape[0],
