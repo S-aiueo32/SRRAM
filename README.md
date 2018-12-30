@@ -42,7 +42,7 @@ python test.py --model_dir path/to/your/.h5 --filename path/to/your/image
 ```
 
 ## Results
-This is a x2 result with only 1000 epoch training. If you have more training time, the results will be improved.
+This is a x3 result with only 2200 epoch training. If you have more  data or training time, the results will be improved. ;-)
 <img width="733" alt="result" src="./src/result.png">
 
 ## Citation
