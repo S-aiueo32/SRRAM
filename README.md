@@ -3,13 +3,13 @@
 This is an unofficial implementation of RAM: Residual Attention Module for Single Image Super-Resolution [[arXiv]](https://arxiv.org/abs/1811.12043). 
 
 RAM is one of attention blocks for super-resolution that has channel-attention(CA) and spatial-attention(SA). CA is computed using global variance pooling and fully-connected layers, and SA is obtained by depth-wise covolutions. After the parallel computation, they are fused by element-wise addition and activated by softmax operator, finally applied into the original feature maps. Before the output, there is a skip-connection from the previous layer.
-<img width="733" alt="スクリーンショット 2018-12-16 15.15.10.png" src="https://qiita-image-store.s3.amazonaws.com/0/274187/3fdf24c9-5c5f-28d2-dfd4-3af4351c4c75.png">
+<img width="733" alt="RAM" src="./src/RAM.png">
 
 SRRAM consists of stacked RAMs like EDSR.
-<img width="733" alt="スクリーンショット 2018-12-16 15.15.10.png" src="https://camo.qiitausercontent.com/7d4bb73ca4d3522f38ecc9ae4f20c99e4c3664b5/68747470733a2f2f71696974612d696d6167652d73746f72652e73332e616d617a6f6e6177732e636f6d2f302f3237343138372f32616165653633632d396161632d333930362d323964662d6566393233326332656439322e706e67">
+<img width="733" alt="SRRAM" src="./src/SRRAM.png">
 
 The attention blocks having CA and SA have already proposed, however, their attentions are applied sequentially or directly to input features, which means that the attentions is appied 2 times for each block. RAM is clearly different from other blocks because of the fusion before the application.
-<img width="733" alt="スクリーンショット 2018-12-16 15.15.10.png" src="https://camo.qiitausercontent.com/adf2465d40117b830fd95fd1e90f73879cdf93a9/68747470733a2f2f71696974612d696d6167652d73746f72652e73332e616d617a6f6e6177732e636f6d2f302f3237343138372f32333731666162362d616263642d346132652d653936312d6132353632396538303336322e706e67">
+<img width="733" alt="comparision" src="./src/comparision.png">
 
 
 ## Requirements
@@ -38,11 +38,12 @@ The default parameters is not optimized now, so I will update them.
 ## Testing on your image
 After your training, you can test the model on your image like below.
 ```
-python test.py --model_dir ./saved/<PID> --filename path/to/your/image
+python test.py --model_dir path/to/your/.h5 --filename path/to/your/image
 ```
 
 ## Results
-**UNDER CONSTRUCTION**
+This is a x2 result with only 1000 epoch training. If you have more training time, the results will be improved.
+<img width="733" alt="result" src="./src/result.png">
 
 ## Citation
 ```
