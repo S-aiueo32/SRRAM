@@ -26,6 +26,7 @@ def RAM(input, channels, kernel_size=3):
 def CA(input, channels, reduction_ratio=16):
     _, x = Lambda(lambda x: tf.nn.moments(x, axes=[1, 2]))(input)
     x = Dense(channels // reduction_ratio)(x)
+    x = ReLU()(x)
     x = Dense(channels)(x)
     return x
 
