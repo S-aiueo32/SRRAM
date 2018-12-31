@@ -16,14 +16,20 @@ import argparse
 parser = argparse.ArgumentParser()
 parser.add_argument('--data_dir', type=str, default='./data/General-100')
 parser.add_argument('--save_dir', type=str, default='./saved')
-parser.add_argument('--img_size', type=int, default=48)
+parser.add_argument('--img_size', type=int, default=96)
+parser.add_argument('--extension', type=str, default='bmp')
 parser.add_argument('--scale_factor', type=int, default=2)
+
 parser.add_argument('--epochs', type=int, default=25)
+parser.add_argument('--patience', type=int, default=1000)
 parser.add_argument('--batch_size', type=int, default=16)
+
 parser.add_argument('--lr', type=float, default=1e-4)
 parser.add_argument('--beta1', type=float, default=0.9)
 parser.add_argument('--beta2', type=float, default=0.999)
-parser.add_argument('--extension', type=str, default='bmp')
+parser.add_argument('--decay_step', type=int, default=2e+5)
+parser.add_argument('--decay_rate', type=int, default=2)
+
 flags = parser.parse_args()
 
 dataset = Dataset(flags)
@@ -31,9 +37,11 @@ srram = SRRAM(scale_factor=flags.scale_factor)
 
 save_path = utils.build_save_path(flags)
 cbs = [TensorBoard(log_dir=save_path, histogram_freq=1, write_graph=True),
-       LearningRateScheduler(lambda epoch: utils.lr_decay(epoch, init_value=flags.lr)),
-       EarlyStopping(monitor='val_loss', patience=1000, verbose=0, mode='auto'),
-       ModelCheckpoint(save_path + '/model.e{epoch:05d}-loss{val_loss:.2f}.h5', save_best_only=True, period=100)]
+       LearningRateScheduler(lambda epoch: utils.lr_decay(epoch, init_value=flags.lr,
+                                                          decay_step=flags.decay_step,
+                                                          decay_rate=flags.decay_rate)),
+       EarlyStopping(monitor='val_loss', patience=flags.patience, verbose=0, mode='auto'),
+       ModelCheckpoint(save_path + '/model.h5', save_best_only=True)]
 
 srram.model.compile(optimizer=Adam(lr=flags.lr, epsilon=1e-8), loss='mae')
 srram.model.fit(dataset.train_set, epochs=flags.epochs, steps_per_epoch=dataset.train_steps_per_epoch,
